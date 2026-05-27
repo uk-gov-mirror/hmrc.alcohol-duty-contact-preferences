@@ -66,4 +66,5 @@ lazy val scoverageExcludedList: Seq[String] = Seq(
   ".*models.audit.*"
 )
 
+addCommandAlias("scalafmtAll", "all scalafmtSbt scalafmt Test/scalafmt it/Test/scalafmt")
 addCommandAlias("runAllChecks", ";clean;test:compile;it/compile;scalafmtAll;coverage;test;it/test;coverageReport")

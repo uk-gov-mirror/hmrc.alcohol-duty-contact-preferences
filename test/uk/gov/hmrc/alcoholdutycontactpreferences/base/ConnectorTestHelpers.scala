@@ -18,7 +18,7 @@ package uk.gov.hmrc.alcoholdutycontactpreferences.base
 
 import helpers.{TestData, WireMockHelper}
 import org.scalatest.Suite
-import play.api.Application
+import play.api.{Application, Configuration}
 import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder
 import uk.gov.hmrc.alcoholdutycontactpreferences.config.AppConfig
@@ -40,7 +40,13 @@ trait ConnectorTestHelpers extends HttpClientV2Support with WireMockHelper with 
         .configure(getWireMockAppConfig(Seq(endpointName)))
         .build()
 
-    val config = new AppConfig(application.configuration, new ServicesConfig(application.configuration))
+    private val testConfiguration = Configuration
+      .from(
+        Map("features.email-verification-stub" -> false)
+      )
+      .withFallback(application.configuration)
+
+    val config = new AppConfig(testConfiguration, new ServicesConfig(application.configuration))
 
     val appWithHttpClientV2: Application = new GuiceApplicationBuilder()
       .configure(getWireMockAppConfig(Seq(endpointName)))
